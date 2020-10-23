@@ -7,6 +7,7 @@ var engine, world;
 var box1, pig1,pig3;
 var backgroundImg,platform;
 var bird, slingshot;
+var birds = [];
 
 var gameState = "onSling";
 var bg = "sprites/bg1.png";
@@ -41,6 +42,16 @@ function setup(){
     log5 = new Log(870,120,150, -PI/7);
 
     bird = new Bird(200,50);
+    bird2 = new Bird(150,170);
+    bird3 = new Bird(100,170);
+    bird4 = new Bird(50,170);
+
+    birds.push(bird4);
+    birds.push(bird3);
+    birds.push(bird2);
+    birds.push(bird);
+
+    console.log(birds);
 
     //log6 = new Log(230,180,80, PI/2);
     slingshot = new SlingShot(bird.body,{x:200, y:50});
@@ -53,7 +64,7 @@ function draw(){
         noStroke();
         textSize(35)
         fill("white")
-        text("Score  " + score, width-300, 50)
+        text("Score  " + score, width-300, 50);
     
     Engine.update(engine);
     //strokeWeight(4);
@@ -75,26 +86,35 @@ function draw(){
     log5.display();
 
     bird.display();
+    bird2.display();
+    bird3.display();
+    bird4.display();
     platform.display();
     //log6.display();
     slingshot.display();    
 }
 
 function mouseDragged(){
-    //if (gameState!=="launched"){
-        Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
-    //}
+    if (gameState!=="launched"){
+        Matter.Body.setPosition(birds[birds.length-1].body, {x: mouseX , y: mouseY});
+        //Matter.Body.applyForce(birds[birds.length-1].body,birds[birds.length-1].body.position,{x:5,y:-5});
+    }
 }
 
 
 function mouseReleased(){
     slingshot.fly();
     gameState = "launched";
+    birds[birds.length-1].disappear();
+    birds.pop();
 }
 
 function keyPressed(){
     if(keyCode === 32){
-       slingshot.attach(bird.body);
+        //Matter.Body.setPosition(birds[birds{x:200,y:50});
+        gameState = "onSling";
+       slingshot.attach(birds[birds.length-1].body);
+       bird.trajectory = [];
     }
 }
 
@@ -105,7 +125,7 @@ async function getBackgroundImg(){
     var datetime = responseJSON.datetime;
     var hour = datetime.slice(11,13);
     
-    if(hour>=0600 && hour<=1900){
+    if(hour>=06 && hour<=19){
         bg = "sprites/bg1.png";
     }
     else{

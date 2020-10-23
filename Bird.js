@@ -4,6 +4,7 @@ class Bird extends BaseClass {
     this.image = loadImage("sprites/bird.png");
     this.smokeImage = loadImage("sprites/smoke.png");
     this.trajectory =[];
+    this.Visibility=500;
   }
 
   display() {
@@ -18,8 +19,20 @@ class Bird extends BaseClass {
     }
    
 
+
+   
+
     for(var i=0; i<this.trajectory.length; i++){
       image(this.smokeImage, this.trajectory[i][0], this.trajectory[i][1]);
     }
+  }
+
+  disappear(){
+      push();
+      this.Visibility = this.Visibility - 5;
+      tint(255,this.Visibility);
+      image(this.image, this.body.position.x, this.body.position.y, 50, 50);
+      //World.remove(world, this.body);
+      pop();
   }
 }
